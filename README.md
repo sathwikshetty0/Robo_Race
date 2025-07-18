@@ -118,10 +118,6 @@ This is the most critical step for a skid-steer bot. You need to program your tr
     * You will typically see settings like `Mix 1`, `Source`, `Destination`, `Up Rate`, `Down Rate`.
     * A common setup is to mix Channel 1 and Channel 2. You may need to experiment with the rate percentages (e.g., setting them to 100%) to get the bot to drive straight and turn correctly. Refer to your controller's manual for specific instructions on V-Tail mixing.
 
-
------
-Of course. Here is a more detailed guide focusing specifically on Version 3, breaking down the process into finer steps.
-
 -----
 
 ## **Version 3: Custom ESP-NOW Controller (Servo Steering)**
