@@ -1,9 +1,11 @@
+
 # RC Race Bot Build Guide
 
-This guide provides a detailed breakdown of the components and connections required to build your own RC Race Bot. It covers two distinct build paths:
+This guide provides a detailed breakdown of the components and connections required to build your own RC Race Bot. It now covers three distinct build paths, offering a range of control options from standard hobby-grade to custom DIY electronics.
 
-1.  **Option 1: The High-Speed Race Bot (Recommended)** - Uses a steering servo for precise, high-speed control. This is the standard for racing.
-2.  **Option 2: The Tank-Style Bot (Skid Steer)** - Uses two motors for movement and steering, without a servo. This is simpler mechanically but harder to control for racing.
+1.  **Version 1: Flysky Controller with Servo Steering (Recommended)** - The standard, high-performance racing setup.
+2.  **Version 2: Flysky Controller with Tank-Style Steering** - A powerful skid-steer build using two motors.
+3.  **Version 3: Custom ESP-NOW Controller (Servo Steering)** - An advanced DIY version that replaces the Flysky system with a custom-built wireless controller.
 
 ---
 
@@ -116,20 +118,6 @@ This is the most critical step for a skid-steer bot. You need to program your tr
     * You will typically see settings like `Mix 1`, `Source`, `Destination`, `Up Rate`, `Down Rate`.
     * A common setup is to mix Channel 1 and Channel 2. You may need to experiment with the rate percentages (e.g., setting them to 100%) to get the bot to drive straight and turn correctly. Refer to your controller's manual for specific instructions on V-Tail mixing.
 
----
-Of course. I've updated the `README.md` file to include the three distinct versions you've outlined. I also analyzed the ESP-NOW code you provided and corrected a critical issue to ensure it works properly.
-
-Here is your updated, comprehensive `README.md` file.
-
------
-
-# RC Race Bot Build Guide
-
-This guide provides a detailed breakdown of the components and connections required to build your own RC Race Bot. It now covers three distinct build paths, offering a range of control options from standard hobby-grade to custom DIY electronics.
-
-1.  **Version 1: Flysky Controller with Servo Steering (Recommended)** - The standard, high-performance racing setup.
-2.  **Version 2: Flysky Controller with Tank-Style Steering** - A powerful skid-steer build using two motors.
-3.  **Version 3: Custom ESP-NOW Controller (Servo Steering)** - An advanced DIY version that replaces the Flysky system with a custom-built wireless controller.
 
 -----
 
