@@ -120,12 +120,15 @@ This is the most critical step for a skid-steer bot. You need to program your tr
 
 
 -----
+Of course. Here is a more detailed guide focusing specifically on Version 3, breaking down the process into finer steps.
 
-## **3. Version 3: Custom ESP-NOW Controller (Servo Steering)**
+-----
 
-This advanced version replaces the Flysky system with a custom-built, low-latency wireless controller using ESP32 boards. This build uses the **servo steering chassis from Version 1**.
+## **Version 3: Custom ESP-NOW Controller (Servo Steering)**
 
+This advanced version replaces the standard Flysky radio system with a custom-built, low-latency wireless controller using ESP32 boards. This build is for the **servo steering chassis** (the same hardware as Version 1) and offers maximum customizability, such as the trim functions included in your code. It requires a good understanding of electronics and coding.
 
+-----
 
 ### **3.1. Required Components**
 
@@ -134,33 +137,61 @@ This advanced version replaces the Flysky system with a custom-built, low-latenc
 | **(A) Transmitter** | | |
 | ESP32 Board | 1 | e.g., ESP32 DEVKIT V1 |
 | Joystick Module | 1 | 2-Axis Analog Joystick |
-| Push Buttons | 2 | For trim controls. |
-| Power Source | 1 | USB Power Bank or small LiPo. |
+| Push Buttons | 2 | Momentary push buttons for trim control. |
+| Power Source | 1 | USB Power Bank or a small LiPo with a 5V regulator. |
+| Prototyping Board | 1 | A breadboard or perfboard to assemble the controller. |
 | **(B) Bot / Receiver**| | |
 | ESP32 Board | 1 | e.g., ESP32 DEVKIT V1 |
 | **All Bot Components from Version 1** | 1 set | **Excluding the Flysky Controller.** You still need the chassis, motor, ESC, servo, battery, etc. |
 
-### **3.2. Wiring and Connections**
+-----
 
-  * **Transmitter:**
+### **3.2. Step-by-Step Guide**
 
-      * Connect the Joystick's `VCC` and `GND`.
-      * Connect the Joystick's `VRx` and `VRy` pins to analog input pins on the transmitter ESP32 (e.g., GPIO 33 and 32, as per your code).
-      * Connect the two trim buttons to GPIO pins (e.g., GPIO 23 and 22).
+This process is broken down into three main phases: finding the bot's unique address, building the transmitter, and assembling the receiver on the bot.
 
-  * **Receiver (Bot):**
+#### **Phase 1: Find Your Bot's Unique MAC Address**
 
-      * The receiver ESP32 replaces the Flysky receiver.
-      * **Steering Servo -\> GPIO 27:** Connect the servo's signal wire to pin 27 of the receiver ESP32.
-      * **ESC -\> GPIO 26:** Connect the ESC's signal wire to pin 26 of the receiver ESP32.
-      * Power the servo and receiver ESP32 using the 5V output from your ESC's BEC.
+Every ESP32 has a unique hardware address called a MAC address. The transmitter needs to know this address to send data to the correct bot.
 
-### **3.3. Setup**
+1.  **Get the Code:** Use a simple "MAC Address Finder" sketch. You can find one included with the ESP32 examples in the Arduino IDE or use the one provided in our earlier conversation.
+2.  **Upload to Bot's ESP32:** Connect the ESP32 that will be on your bot to your computer and upload this sketch.
+3.  **Find the Address:** Open the Arduino IDE's Serial Monitor (set to 115200 baud). Press the ESP32's `RST` button. The MAC address will be printed (e.g., `D8:BC:38:79:B9:98`).
+4.  **Save the Address:** Copy this address. You will need it for the transmitter code.
 
-1.  **Find MAC Address:** Upload a simple MAC address finder sketch to your receiver ESP32 and copy its address from the Serial Monitor.
-2.  **Update Transmitter Code:** Paste the receiver's MAC address into the `receiverMacAddress` variable in your transmitter script. Also, ensure both scripts use the corrected `PacketData` structure shown above.
-3.  **Upload:** Upload the final code to the transmitter and receiver boards. Your custom controller is now ready to use.
+#### **Phase 2: Build and Program the Transmitter**
 
+The transmitter is your handheld remote control.
+
+1.  **Hardware Assembly:**
+      * Place the transmitter ESP32 on a breadboard or perfboard.
+      * **Joystick:** Connect the joystick module's `VCC` pin to `3.3V` on the ESP32 and `GND` to `GND`. Connect the `VRx` (X-axis) and `VRy` (Y-axis) pins to the analog input pins specified in your transmitter code (e.g., GPIO 33 and 32).
+      * **Trim Buttons:** Connect one leg of each push button to a GPIO pin specified in the code (e.g., GPIO 23 and 22). Connect the other leg of each button to `GND`. The code uses `INPUT_PULLUP`, so no external resistors are needed.
+2.  **Software Setup:**
+      * Open your transmitter sketch in the Arduino IDE.
+      * **Update MAC Address:** Find the line `uint8_t receiverMacAddress[] = {...};` and replace the placeholder address with the one you copied from your bot.
+      * **Check Pins:** Double-check that the pin numbers in the code match your wiring.
+      * **Upload:** Upload the completed sketch to your transmitter ESP32.
+
+#### **Phase 3: Assemble and Program the Bot's Receiver**
+
+The receiver ESP32 replaces the Flysky receiver and acts as the bot's new brain.
+
+1.  **Hardware Assembly:**
+
+      * Mount the receiver ESP32 securely onto your bot's chassis.
+      * **ESC Connection:** Locate the 3-pin connector from your brushless ESC. Connect its **signal wire** to the GPIO pin specified in your receiver code for the ESC (e.g., GPIO 26).
+      * **Steering Servo Connection:** Connect the steering servo's **signal wire** to the GPIO pin specified for the servo (e.g., GPIO 27).
+      * **Powering the System:** Connect the ESC's `5V` (red wire) and `GND` (black wire) pins to the `VIN` and `GND` pins on your ESP32 board. The ESC's internal BEC (Battery Eliminator Circuit) will power the ESP32 and the steering servo.
+      * **Main Power:** The brushless motor and main battery connect to the ESC as they did in Version 1.
+
+2.  **Software Setup:**
+
+      * Open your receiver sketch in the Arduino IDE.
+      * **Check Pins:** Ensure the servo and ESC pins defined in the code (27 and 26) match your connections.
+      * **Upload:** Upload the sketch to the receiver ESP32 on the bot.
+
+Your custom ESP-NOW controlled race bot is now complete. Turn on the transmitter first, then power up the bot. You should have full proportional control over steering and throttle.
 -----
 
 ## **4. Critical Safety Information (READ THIS\!)**
