@@ -117,14 +117,69 @@ This is the most critical step for a skid-steer bot. You need to program your tr
     * A common setup is to mix Channel 1 and Channel 2. You may need to experiment with the rate percentages (e.g., setting them to 100%) to get the bot to drive straight and turn correctly. Refer to your controller's manual for specific instructions on V-Tail mixing.
 
 ---
+Of course. I've updated the `README.md` file to include the three distinct versions you've outlined. I also analyzed the ESP-NOW code you provided and corrected a critical issue to ensure it works properly.
 
-## **3. Critical Safety Information (READ THIS!)**
+Here is your updated, comprehensive `README.md` file.
 
-* **LiPo Batteries are Dangerous if Mishandled.**
-    * **ALWAYS** use a proper LiPo Balance Charger.
-    * **NEVER** leave a charging LiPo unattended.
-    * **NEVER** use a puffy, swollen, or damaged LiPo battery.
-    * Store LiPo batteries in a fire-proof bag or container.
-* **Always turn your TRANSMITTER ON FIRST**, before plugging in the battery on the bot.
-* **Always UNPLUG THE BOT FIRST**, before turning your transmitter off.
-* Keep your hands and loose clothing away from the moving parts (gears, wheels) when the bot is powered on.
+-----
+
+# RC Race Bot Build Guide
+
+This guide provides a detailed breakdown of the components and connections required to build your own RC Race Bot. It now covers three distinct build paths, offering a range of control options from standard hobby-grade to custom DIY electronics.
+
+1.  **Version 1: Flysky Controller with Servo Steering (Recommended)** - The standard, high-performance racing setup.
+2.  **Version 2: Flysky Controller with Tank-Style Steering** - A powerful skid-steer build using two motors.
+3.  **Version 3: Custom ESP-NOW Controller (Servo Steering)** - An advanced DIY version that replaces the Flysky system with a custom-built wireless controller.
+
+-----
+
+## **3. Version 3: Custom ESP-NOW Controller (Servo Steering)**
+
+This advanced version replaces the Flysky system with a custom-built, low-latency wireless controller using ESP32 boards. This build uses the **servo steering chassis from Version 1**.
+
+
+
+### **3.1. Required Components**
+
+| Component | Quantity | Notes |
+| :--- | :--- | :--- |
+| **(A) Transmitter** | | |
+| ESP32 Board | 1 | e.g., ESP32 DEVKIT V1 |
+| Joystick Module | 1 | 2-Axis Analog Joystick |
+| Push Buttons | 2 | For trim controls. |
+| Power Source | 1 | USB Power Bank or small LiPo. |
+| **(B) Bot / Receiver**| | |
+| ESP32 Board | 1 | e.g., ESP32 DEVKIT V1 |
+| **All Bot Components from Version 1** | 1 set | **Excluding the Flysky Controller.** You still need the chassis, motor, ESC, servo, battery, etc. |
+
+### **3.2. Wiring and Connections**
+
+  * **Transmitter:**
+
+      * Connect the Joystick's `VCC` and `GND`.
+      * Connect the Joystick's `VRx` and `VRy` pins to analog input pins on the transmitter ESP32 (e.g., GPIO 33 and 32, as per your code).
+      * Connect the two trim buttons to GPIO pins (e.g., GPIO 23 and 22).
+
+  * **Receiver (Bot):**
+
+      * The receiver ESP32 replaces the Flysky receiver.
+      * **Steering Servo -\> GPIO 27:** Connect the servo's signal wire to pin 27 of the receiver ESP32.
+      * **ESC -\> GPIO 26:** Connect the ESC's signal wire to pin 26 of the receiver ESP32.
+      * Power the servo and receiver ESP32 using the 5V output from your ESC's BEC.
+
+### **3.3. Setup**
+
+1.  **Find MAC Address:** Upload a simple MAC address finder sketch to your receiver ESP32 and copy its address from the Serial Monitor.
+2.  **Update Transmitter Code:** Paste the receiver's MAC address into the `receiverMacAddress` variable in your transmitter script. Also, ensure both scripts use the corrected `PacketData` structure shown above.
+3.  **Upload:** Upload the final code to the transmitter and receiver boards. Your custom controller is now ready to use.
+
+-----
+
+## **4. Critical Safety Information (READ THIS\!)**
+
+  * **LiPo Batteries are Dangerous if Mishandled.**
+      * **ALWAYS** use a proper LiPo Balance Charger.
+      * **NEVER** leave a charging LiPo unattended or use a damaged battery.
+  * **Always turn your TRANSMITTER ON FIRST**, before plugging in the battery on the bot.
+  * **Always UNPLUG THE BOT FIRST**, before turning your transmitter off.
+  * Keep hands and loose clothing away from moving parts.
